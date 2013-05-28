@@ -99,7 +99,7 @@ jQuery(function ($) {
     sw.watch(function () {
         var $target = $('.renderTarget').text('');
         $.each(people, function (i, person) {
-            var $personTarget = $('<div />').attr('class', person.name());
+            var $personTarget = $('<div />').attr('class', 'person ' + person.name());
             $target.append($personTarget);
             sw.watch(function () {
                 var pet = person.pet();
@@ -110,12 +110,31 @@ jQuery(function ($) {
                 }
             });
         });
-
-        // cancel these re-renders on click
-        var watcher = this;
-        $target.click(function () {
-            watcher.dispose();
+    });
+    
+    sw.await(function () {
+        return [
+            paula.pet(),
+            mike.pet(),
+            alex.pet(),
+            lyle.pet()
+        ];
+    }, function () {
+        var $target = $('.awaitRenderTarget').text('');
+        $.each(people, function (i, person) {
+            var $personTarget = $('<div />').appendTo($target);
+            sw.watch(function () {
+                var pet = person.pet();
+                if (pet) {
+                    $personTarget.text(person.name() + ' has a pet: ' + pet.title() + '.');
+                } else {
+                    $personTarget.text(person.name() + ' has no pet.');
+                }
+            });
         });
+    }, function () {
+        $('.awaitRenderTarget')
+        .text('Nothing will be rendered here unless everyone has a pet.');
     });
     
     waiter.await(function () {
