@@ -344,7 +344,7 @@
                 return this.splice(this._data.length, 0, [newValue]); // TODO minimize impact?
             },
             pop: function () {
-                return this.splice(this._data.length, 1); // TODO minimize impact?
+                return this.splice(this._data.length - 1, 1); // TODO minimize impact?
             },
             shift: function () {
                 return this.splice(0, 1);
