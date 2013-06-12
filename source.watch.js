@@ -221,13 +221,13 @@
     }());
     function source() { return new Source(); }
 
-    function makeGetter(key) {
+    function createGetter(key) {
         return function () {
             this._source.pull(key);
             return this[key];
         };
     }
-    function makeSetter(key) {
+    function createSetter(key) {
         return function (newValue) {
             var oldValue = this[key];
             if (oldValue !== newValue) {
@@ -237,7 +237,7 @@
             return this;
         };
     }
-    function makeProperty(key) {
+    function createProperty(key) {
         return function (newValue) {
             if (newValue === undef) {
                 this._source.pull(key);
@@ -259,8 +259,8 @@
                 this._index = index;
                 this._value = value;
             },
-            index: makeProperty('_index'),
-            value: makeProperty('_value')
+            index: createProperty('_index'),
+            value: createProperty('_value')
         });
         return makeClass({
             _construct: function (data) {
@@ -268,7 +268,7 @@
                 this._data = [];
                 this.append(data);
             },
-            data: makeGetter('_data'), // eliminate data() in favor of map()?
+            data: createGetter('_data'), // eliminate data() in favor of map()?
             size: function () {
                 this._source.pull('_size');
                 return this._data.length;
@@ -392,9 +392,9 @@
                 this._size = 0;
                 this._keys = []; // TODO use reactive list?
             },
-            data: makeGetter('_data'),
-            size: makeGetter('_size'),
-            keys: makeGetter('_keys'),
+            data: createGetter('_data'),
+            size: createGetter('_size'),
+            keys: createGetter('_keys'),
             get: function (key) {
                 this._source.pull(key);
                 return this._data[key];
@@ -474,9 +474,9 @@
         waiter: waiter,
         await: await,
 
-        makeGetter: makeGetter,
-        makeSetter: makeSetter,
-        makeProperty: makeProperty,
+        createGetter: createGetter,
+        createSetter: createSetter,
+        createProperty: createProperty,
 
         list: list,
         dictionary: dictionary
